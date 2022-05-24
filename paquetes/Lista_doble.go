@@ -52,3 +52,31 @@ func (l *Lista_doble) Actualizar(data int, nueva_data int) {
 		aux = aux.Ant
 	}
 }
+
+func (l *Lista_doble) Eliminar(data int) {
+	delete := false
+	tmp := l.Cola
+	for tmp != nil {
+		if tmp.Dato == data {
+			delete = true
+			if tmp.Ant == nil {
+				//situacion 1; Eliminar Cabeza    { nil <-nodo-> Sig }
+				l.Cabeza = tmp.Sig
+				l.Cabeza.Ant = nil
+			} else if tmp.Sig == nil {
+				// situcacion 2: si se quiereien eliminar Cola   { prev <-nodo-> nil }
+				l.Cola = tmp.Ant
+				l.Cola.Sig = nil
+			} else {
+				//situacion 3: eliminar cualquiera del centro   { prev <-nodo-> Sig }
+				tmp.Ant.Sig = tmp.Sig
+				tmp.Sig.Ant = tmp.Ant
+			}
+			break
+		}
+		tmp = tmp.Ant
+	}
+	if !delete {
+		fmt.Println("<No existe el dato: \"", data, "\" a eliminar>")
+	}
+}

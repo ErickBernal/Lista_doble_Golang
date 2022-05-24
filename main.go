@@ -30,6 +30,7 @@ func main() {
 	fmt.Println("---------------------")
 	lista_d.Mostrar_Sig()
 	fmt.Println("---------------------")
-
+	lista_d.Eliminar(22)
+	lista_d.Eliminar(11)
 	lista_d.Mostrar_Ant()
 }
