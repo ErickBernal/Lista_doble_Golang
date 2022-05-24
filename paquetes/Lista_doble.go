@@ -26,6 +26,60 @@ func (l *Lista_doble) Agregar(nuevo_dato int) {
 	l.Cola = nuevo_Nodo_doble
 }
 
+func (l *Lista_doble) Agregar_ordenado(nuevo_dato int) {
+	nuevo_Nodo_doble := &Nodo_doble{Dato: nuevo_dato, Ant: nil, Sig: nil}
+
+	if l.Cola == nil && l.Cabeza == nil { //lista vacia
+		l.Cabeza = nuevo_Nodo_doble
+		l.Cola = nuevo_Nodo_doble
+	} else {
+		//situacion 1: solo existe cabeza
+		if l.Cabeza.Ant == nil && l.Cabeza.Sig == nil {
+			if nuevo_dato < l.Cabeza.Dato { // si es menor, a la izquierda
+				nuevo_Nodo_doble.Sig = l.Cabeza
+				l.Cabeza.Ant = nuevo_Nodo_doble
+				l.Cola = l.Cabeza
+				l.Cabeza = nuevo_Nodo_doble
+			} else { //si es mayor o igual, a la derecha
+				l.Cabeza.Sig = nuevo_Nodo_doble
+				nuevo_Nodo_doble.Ant = l.Cabeza
+				l.Cola = nuevo_Nodo_doble
+			}
+		} else if nuevo_dato < l.Cabeza.Dato {
+			//situacion 2: si es menor a cabeza
+			nuevo_Nodo_doble.Sig = l.Cabeza
+			l.Cabeza.Ant = nuevo_Nodo_doble
+			l.Cabeza = nuevo_Nodo_doble
+		} else if nuevo_dato > l.Cola.Dato {
+			//si es mayor a la cola
+			l.Cola.Sig = nuevo_Nodo_doble
+			nuevo_Nodo_doble.Ant = l.Cola
+			l.Cola = nuevo_Nodo_doble
+		} else {
+			//si es mayor a cabeza, pero menor a cola => recorremos
+			aux := l.Cabeza
+			for aux != nil {
+				if nuevo_dato < aux.Dato {
+					aux.Ant.Sig = nuevo_Nodo_doble
+					nuevo_Nodo_doble.Ant = aux.Ant
+
+					nuevo_Nodo_doble.Sig = aux
+					aux.Ant = nuevo_Nodo_doble
+					break
+				} else if nuevo_dato >= aux.Dato && nuevo_dato < aux.Sig.Dato { //si es mayor o igual
+					nuevo_Nodo_doble.Sig = aux.Sig
+					aux.Sig.Ant = nuevo_Nodo_doble
+
+					aux.Sig = nuevo_Nodo_doble
+					nuevo_Nodo_doble.Ant = aux
+					break
+				}
+				aux = aux.Sig
+			}
+		}
+	}
+}
+
 func (l *Lista_doble) Mostrar_Ant() {
 	aux := l.Cola
 	for aux != nil {
